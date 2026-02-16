@@ -8,7 +8,12 @@ import (
 )
 
 type Config struct {
-	Programs map[string]Program `yaml:"programs"`
+	UnixHttpServer UnixHttpServer     `yaml:"unix_http_server"`
+	Programs       map[string]Program `yaml:"programs"`
+}
+
+type UnixHttpServer struct {
+	File string `yaml:"file"`
 }
 
 type Program struct {

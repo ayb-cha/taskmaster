@@ -1,8 +1,8 @@
 rund:
-    go run ./cmd/taskmasterd/ --conf=./config/config.yaml --log-level=debug
+    go run ./cmd/taskmasterd/ --conf=./config/taskmaster.yaml --log-level=debug
 
 runctl:
-    go run ./cmd/taskmasterctl/ --conf=./config/config.yaml --log-level=debug
+    go run ./cmd/taskmasterctl/ --log-level=debug
 
 lint:
     golangci-lint run

@@ -14,7 +14,7 @@ func InitDaemon() DaemonOptions {
 	fs := flag.NewFlagSet("daemon", flag.ExitOnError)
 
 	logLevel := fs.String("log-level", "INFO", "Log level (DEBUG, INFO, WARN, ERROR)")
-	configPath := fs.String("conf", "./config/config.yaml", "Path to config file")
+	configPath := fs.String("conf", "./config/taskmaster.yaml", "Path to config file")
 
 	error := fs.Parse(os.Args[1:])
 

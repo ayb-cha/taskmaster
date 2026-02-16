@@ -33,12 +33,14 @@ func ReadConfig(configPath string) *Config {
 
 	data, err := os.ReadFile(configPath)
 	if err != nil {
-		slog.Error("Failed to read config file", "error", err)
+		slog.Error("failed to read config file", "error", err)
+		panic(err)
 	}
 
 	err = yaml.Unmarshal(data, &config)
 	if err != nil {
-		slog.Error("Failed to unmarshal config", "error", err)
+		slog.Error("failed to unmarshal config", "error", err)
+		panic(err)
 	}
 
 	return &config

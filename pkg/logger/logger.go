@@ -17,17 +17,13 @@ func Init(level string, logPath *string) {
 	slevel := parseLogLevel(level)
 
 	logFile := os.Stdout
+
 	if logPath != nil {
-		logFile, err := os.OpenFile(*logPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0666)
+		openedLogFile, err := os.OpenFile(*logPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0666)
 		if err != nil {
 			panic(err)
 		}
-		defer func() {
-			error := logFile.Close()
-			if error != nil {
-				panic(error)
-			}
-		}()
+		logFile = openedLogFile
 	}
 
 	logger := slog.New(

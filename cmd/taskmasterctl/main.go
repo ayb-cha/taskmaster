@@ -8,9 +8,8 @@ import (
 )
 
 func main() {
-	logFile := "./logs/taskmasterctl.log"
 	options := cli.InitControl()
-	logger.Init(options.LogLevel, &logFile)
+	logger.Init(options.LogLevel, &options.LogFilePath)
 
 	slog.Debug("starting taskmasterctl")
 }

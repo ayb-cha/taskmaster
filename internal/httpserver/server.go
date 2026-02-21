@@ -15,13 +15,18 @@ func registerRoutes() {
 		fmt.Fprintln(w, "pong")
 	})
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Hello, Unix Socket!")
-	})
+	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	fmt.Fprintln(w, "Hello, Unix Socket!")
+	// })
 }
 
 func Init(config *config.Config) (net.Listener, error) {
-	os.Remove(config.UnixHttpServer.File)
+	error := os.Remove(config.UnixHttpServer.File)
+	if error != nil && !os.IsNotExist(error) {
+		slog.Error("failed to remove existing unix socket file", "error", error)
+		return nil, error
+	}
+
 	listener, err := net.Listen("unix", config.UnixHttpServer.File)
 	if err != nil {
 		slog.Error("failed to create unix socket", "error", err)

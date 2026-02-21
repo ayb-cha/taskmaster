@@ -16,5 +16,8 @@ func main() {
 		panic(err)
 	}
 
-	httpserver.Stop(listener)
+	err = httpserver.Stop(listener)
+	if err != nil {
+		panic(err)
+	}
 }

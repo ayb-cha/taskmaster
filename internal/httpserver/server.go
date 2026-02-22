@@ -1,6 +1,7 @@
 package httpserver
 
 import (
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"net"
@@ -8,16 +9,46 @@ import (
 	"os"
 
 	"github.com/ayb-cha/taskmaster/pkg/config"
+	"github.com/ayb-cha/taskmaster/pkg/types"
 )
 
 func registerRoutes() {
 	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		slog.Info("new client connected")
 		fmt.Fprintln(w, "pong")
 	})
 
-	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	fmt.Fprintln(w, "Hello, Unix Socket!")
-	// })
+	http.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
+		slog.Info("status requested")
+
+		nginxDummyStatus := types.ProgramStatus{
+			Name:   "nginx",
+			State:  "RUNNING",
+			PID:    553,
+			Uptime: "1:05:21",
+		}
+
+		myAppDummyStatus := types.ProgramStatus{
+			Name:   "my-app",
+			State:  "EXITED",
+			PID:    -1,
+			Uptime: "Exited too quickly (process log may have details)",
+		}
+
+		data := []types.ProgramStatus{
+			nginxDummyStatus,
+			myAppDummyStatus,
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		err := json.NewEncoder(w).Encode(data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	})
 }
 
 func Init(config *config.Config) (net.Listener, error) {
@@ -35,13 +66,13 @@ func Init(config *config.Config) (net.Listener, error) {
 
 	registerRoutes()
 
-	go func() {
-		if err := http.Serve(listener, nil); err != nil {
-			slog.Error("failed to Listen on unix socket", "error", err)
-		}
+	// go func() {
+	if err := http.Serve(listener, nil); err != nil {
+		slog.Error("failed to Listen on unix socket", "error", err)
+	}
 
-		slog.Debug("start listening for http requests")
-	}()
+	slog.Debug("start listening for http requests")
+	// }()
 
 	return listener, nil
 }

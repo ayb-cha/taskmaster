@@ -12,12 +12,11 @@ func main() {
 	options := cli.InitDaemon()
 	logger.Init(options.LogLevel, nil)
 	config := config.ReadConfig(options.ConfigPath)
+	process.Start(config)
 	listener, err := httpserver.Init(config)
 	if err != nil {
 		panic(err)
 	}
-
-	process.Start(config)
 
 	err = httpserver.Stop(listener)
 	if err != nil {

@@ -35,13 +35,13 @@ func Init(config *config.Config) (net.Listener, error) {
 
 	registerRoutes()
 
-	// go func() {
-	if err := http.Serve(listener, nil); err != nil {
-		slog.Error("failed to Listen on unix socket", "error", err)
-	}
+	go func() {
+		if err := http.Serve(listener, nil); err != nil {
+			slog.Error("failed to Listen on unix socket", "error", err)
+		}
 
-	slog.Debug("start listening for http requests")
-	// }()
+		slog.Debug("start listening for http requests")
+	}()
 
 	return listener, nil
 }

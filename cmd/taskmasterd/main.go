@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/ayb-cha/taskmaster/internal/httpserver"
+	"github.com/ayb-cha/taskmaster/internal/process"
 	"github.com/ayb-cha/taskmaster/pkg/cli"
 	"github.com/ayb-cha/taskmaster/pkg/config"
 	"github.com/ayb-cha/taskmaster/pkg/logger"
@@ -15,6 +16,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	process.Start(config)
 
 	err = httpserver.Stop(listener)
 	if err != nil {

@@ -23,10 +23,10 @@ func NewClient(config *config.Config) *Client {
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			slog.Error("socket file dose not exists", "error", err)
-			fmt.Println("ERROR: unix://" + config.UnixHttpServer.File + " does not exist")
+			fmt.Fprintln(os.Stderr, "ERROR: unix://"+config.UnixHttpServer.File+" does not exist")
 			os.Exit(1)
 		}
-		fmt.Println("ERROR: unix://" + config.UnixHttpServer.File + " " + err.Error())
+		fmt.Fprintln(os.Stderr, "ERROR: unix://"+config.UnixHttpServer.File+" "+err.Error())
 		os.Exit(1)
 	}
 	return &Client{
@@ -44,7 +44,7 @@ func (c *Client) Ping() {
 	resp, err := c.client.Get("http://unix/ping")
 	if err != nil {
 		slog.Error("failed to send request to unix socket", "error", err)
-		fmt.Println("ERROR: failed to send request to: " + err.Error())
+		fmt.Fprintln(os.Stderr, "ERROR: failed to send request to: "+err.Error())
 		return
 	}
 
@@ -63,7 +63,7 @@ func (c *Client) GetStatus() {
 	resp, err := c.client.Get("http://unix/status")
 	if err != nil {
 		slog.Error("failed to send request to unix socket", "error", err)
-		fmt.Println("ERROR: failed to send request to unix socket: " + err.Error())
+		fmt.Fprintln(os.Stderr, "ERROR: failed to send request to unix socket: "+err.Error())
 		return
 	}
 

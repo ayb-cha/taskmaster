@@ -8,7 +8,7 @@ import (
 )
 
 type Config struct {
-	UnixHttpServer UnixHttpServer     `yaml:"unix_http_server"`
+	UnixHttpServer UnixHttpServer     `yaml:"unix_http_server,omitempty"`
 	Programs       map[string]Program `yaml:"programs"`
 }
 
@@ -17,19 +17,19 @@ type UnixHttpServer struct {
 }
 
 type Program struct {
-	Cmd          string            `yaml:"cmd"`
-	Numprocs     int               `yaml:"numprocs"`
-	Umask        int               `yaml:"umask"`
-	Workingdir   string            `yaml:"workingdir"`
-	Autostart    bool              `yaml:"autostart"`
-	Autorestart  string            `yaml:"autorestart"`
-	Exitcodes    []int             `yaml:"exitcodes"`
-	Startretries int               `yaml:"startretries"`
-	Starttime    int               `yaml:"starttime"`
-	Stopsignal   string            `yaml:"stopsignal"`
-	Stoptime     int               `yaml:"stoptime"`
-	Stdout       string            `yaml:"stdout"`
-	Stderr       string            `yaml:"stderr"`
+	Cmd          string            `yaml:"cmd,omitempty"`
+	Numprocs     int               `yaml:"numprocs,omitempty"`
+	Umask        int               `yaml:"umask,omitempty"`
+	Workingdir   string            `yaml:"workingdir,omitempty"`
+	Autostart    bool              `yaml:"autostart,omitempty"`
+	Autorestart  string            `yaml:"autorestart,omitempty"`
+	Exitcodes    []int             `yaml:"exitcodes,omitempty"`
+	Startretries int               `yaml:"startretries,omitempty"`
+	Starttime    int               `yaml:"starttime,omitempty"`
+	Stopsignal   string            `yaml:"stopsignal,omitempty"`
+	Stoptime     int               `yaml:"stoptime,omitempty"`
+	Stdout       string            `yaml:"stdout,omitempty"`
+	Stderr       string            `yaml:"stderr,omitempty"`
 	Env          map[string]string `yaml:"env,omitempty"`
 }
 

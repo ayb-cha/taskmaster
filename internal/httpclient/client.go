@@ -2,6 +2,7 @@ package httpclient
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -10,7 +11,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/ayb-cha/taskmaster/internal/prettyprint"
 	"github.com/ayb-cha/taskmaster/pkg/config"
+	"github.com/ayb-cha/taskmaster/pkg/types"
 )
 
 type Client struct {
@@ -70,5 +73,15 @@ func (c *Client) GetStatus() {
 	defer resp.Body.Close()
 
 	slog.Debug("received response from unix socket", "status", resp.Status)
-	// fmt.Println("Status:", response)
+
+	var statuses []types.ProgramStatus
+	err = json.NewDecoder(resp.Body).Decode(&statuses)
+
+	if err != nil {
+		slog.Error("error decoding status response json", "error", err)
+	}
+
+	for _, progStatus := range statuses {
+		prettyprint.PrettyprintProgramStatus(progStatus)
+	}
 }
